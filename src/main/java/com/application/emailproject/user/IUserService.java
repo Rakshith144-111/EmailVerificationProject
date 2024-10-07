@@ -1,0 +1,15 @@
+package com.application.emailproject.user;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.application.emailproject.registration.RegistrationRequest;
+
+public interface IUserService {
+	
+	List<User> getUsers();
+	User registerUser(RegistrationRequest request);
+	Optional<User> findByEmail(String email);
+	
+
+}

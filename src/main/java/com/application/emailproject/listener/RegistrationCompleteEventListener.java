@@ -11,9 +11,10 @@ import com.application.emailproject.user.User;
 import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor																			 //Event Name here registartion completion event
+@RequiredArgsConstructor								                     //Event Name here registartion completion event
 public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompletesEvent> {
 
+	//This function is to send the mail for the verification of the registered user once the registration is successful
 	@Override
 	public void onApplicationEvent(RegistrationCompletesEvent event) {
 		//1.get the newly registered user

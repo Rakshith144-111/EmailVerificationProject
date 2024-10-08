@@ -22,9 +22,12 @@ public class RegistrationController {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	
+	//
 	@PostMapping
 	public String register(RegistrationRequest registrationRequest, final HttpServletRequest request)
 	{
+		//Bundling the user using the RegistrationRequest record 
 		User user  = userService.registerUser(registrationRequest);
 		
 		//publish the event registration 
@@ -34,6 +37,7 @@ public class RegistrationController {
 		
 	}
 
+	//Method to create the url for the specific user
 	public  String applicationUrl(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		

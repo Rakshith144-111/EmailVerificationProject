@@ -3,7 +3,6 @@ package com.application.emailproject.registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +25,7 @@ public class RegistrationController {
 	
 	//
 	@PostMapping
-	public String register(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request)
+	public String register(RegistrationRequest registrationRequest, final HttpServletRequest request)
 	{
 		//Bundling the user using the RegistrationRequest record 
 		User user  = userService.registerUser(registrationRequest);
@@ -37,7 +36,7 @@ public class RegistrationController {
 		return "Success! Please check your email to complete for registration Confirmation";
 		
 	}
-	
+
 	//Method to create the url for the specific user
 	public  String applicationUrl(HttpServletRequest request) {
 		// TODO Auto-generated method stub

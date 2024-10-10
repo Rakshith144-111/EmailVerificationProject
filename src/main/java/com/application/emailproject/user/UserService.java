@@ -1,5 +1,6 @@
 package com.application.emailproject.user;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +59,32 @@ public class UserService implements IUserService{
 		var verificationToken = new VerificationToken(token, theUser);
 		tokenRepository.save(verificationToken);
 		
+	}
+	
+	@Override
+	public String validateToken(String theToken) {
+		//get the token from the repository		
+		VerificationToken token = tokenRepository.findByToken(theToken);
+		//if the token is null means then not generated the token 
+		//means it has to go through the correct registration process
+		if(token == null)
+		{
+			return "INVALID verification token as it is expired";
+		}
+		//if the token is there then we have to check whether 
+		//this is a valid for the user who is trying to login
+		User user = token.getUser();
+		Calendar calendar = Calendar.getInstance();
+		//Comparing the current time and the time of the expiration 
+		//if the difference is more than 0 means still has the time to verification
+		if((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0)
+		{
+			tokenRepository.delete(token);
+			return "Token is already expired";
+		}
+		
+		user.setEnabled(true);
+		userRepository.save(user);
+		return "Valid";
 	}
 }

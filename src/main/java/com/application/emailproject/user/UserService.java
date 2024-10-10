@@ -9,14 +9,19 @@ import org.springframework.stereotype.Service;
 
 import com.application.emailproject.exception.UserAlreadyExistsException;
 import com.application.emailproject.registration.RegistrationRequest;
+import com.application.emailproject.registration.token.VerificationToken;
+import com.application.emailproject.registration.token.VerificationTokenRepository;
 
 @Service
 public class UserService implements IUserService{
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private VerificationTokenRepository tokenRepository;
 
 	@Override
 	public List<User> getUsers() {
@@ -28,7 +33,7 @@ public class UserService implements IUserService{
 	@Override
 	public User registerUser(RegistrationRequest request) {
 		// TODO Auto-generated method stub
-		
+
 		Optional<User> user = this.findByEmail(request.email());
 		if(user.isPresent())
 		{
@@ -49,4 +54,9 @@ public class UserService implements IUserService{
 		return userRepository.findByEmail(email);
 	}
 
+	public void saveUserVerificationToken(User theUser, String token) {
+		var verificationToken = new VerificationToken(token, theUser);
+		tokenRepository.save(verificationToken);
+		
+	}
 }

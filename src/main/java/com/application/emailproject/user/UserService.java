@@ -3,6 +3,7 @@ package com.application.emailproject.user;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -86,5 +87,15 @@ public class UserService implements IUserService{
 		user.setEnabled(true);
 		userRepository.save(user);
 		return "Valid";
+	}
+
+	//For getting the new verificationn token if the user old token is got expired
+	public VerificationToken generateNewVerificationToken(String oldToken) {
+		VerificationToken verificationToken = tokenRepository.findByToken(oldToken);
+		var verificationTokenTime =new VerificationToken();
+		verificationToken.setToken(UUID.randomUUID().toString());
+		verificationToken.setExpirationTime(verificationTokenTime.getTokenExpirationTime());
+		
+		return tokenRepository.save(verificationToken);
 	}
 }

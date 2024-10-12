@@ -22,7 +22,6 @@ import com.application.emailproject.user.UserService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/register")
@@ -40,8 +39,8 @@ public class RegistrationController {
 	@Autowired
 	private RegistrationCompleteEventListener eventListener;
 	//
-//	@Autowired
-//	private final HttpServletRequest servletRequest = null;
+	@Autowired
+	private HttpServletRequest servletRequest;
 	
 	private static final Logger log = LoggerFactory.getLogger(RegistrationCompleteEventListener.class);
 	
@@ -95,9 +94,9 @@ public class RegistrationController {
 	//This method will take the token from the database and then verify whether this is a valid one or not
 	//So that is why we are creating the findByemail in the Verification token repo
 	@GetMapping("/verifyEmail")
-	public String verifyEmail(@RequestParam("token") String token,final HttpServletRequest servletRequest)
+	public String verifyEmail(@RequestParam("token") String token)
 	{
-		String url = applicationUrl(servletRequest)+"/"+"resend-verification-token?token="+token ;
+		String url = applicationUrl(servletRequest)+"/register/resend-verification-token?token="+token ;
 		VerificationToken theToken = tokenRepository.findByToken(token);
 		if(theToken.getUser().isEnabled())
 		{
@@ -109,7 +108,7 @@ public class RegistrationController {
 		{
 			return "Email verified Successfully.Now you can login to your account";
 		}
-		
+				
 		return "Invalid verification token, <a href=\""+url+"\"> Get a new verification link.</a>" ; 
 		
 	}

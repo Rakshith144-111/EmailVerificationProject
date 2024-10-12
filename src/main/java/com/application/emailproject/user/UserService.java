@@ -80,7 +80,7 @@ public class UserService implements IUserService{
 		//if the difference is more than 0 means still has the time to verification
 		if((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0)
 		{
-			tokenRepository.delete(token);
+			//tokenRepository.delete(token);
 			return "Token is already expired";
 		}
 		
@@ -91,11 +91,17 @@ public class UserService implements IUserService{
 
 	//For getting the new verificationn token if the user old token is got expired
 	public VerificationToken generateNewVerificationToken(String oldToken) {
-		VerificationToken verificationToken = tokenRepository.findByToken(oldToken);
-		var verificationTokenTime =new VerificationToken();
-		verificationToken.setToken(UUID.randomUUID().toString());
-		verificationToken.setExpirationTime(verificationTokenTime.getTokenExpirationTime());
-		
-		return tokenRepository.save(verificationToken);
+	    // Find the existing token by the old token value
+	    VerificationToken verificationToken = tokenRepository.findByToken(oldToken);
+
+	    // Update the token with a newly generated one
+	    verificationToken.setToken(UUID.randomUUID().toString());
+
+	    // Update the expiration time with the new calculated expiration time
+	    verificationToken.setExpirationTime(verificationToken.getTokenExpirationTime());
+
+	    // Save and return the updated verification token
+	    return tokenRepository.save(verificationToken);
 	}
+
 }
